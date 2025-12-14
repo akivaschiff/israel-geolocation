@@ -2,14 +2,15 @@
   "name": "israel-geolocation",
   "version": "1.0.0",
   "description": "Complete geolocation data for all Israeli cities, towns, and villages with Hebrew and English names",
+  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     }
   },
   "files": [
@@ -17,10 +18,15 @@
     "README.md",
     "LICENSE"
   ],
+  "sideEffects": false,
   "scripts": {
-    "build": "node scripts/build-improved.js && npm run compile",
+    "build": "node scripts/build-improved.cjs && npm run compile",
     "compile": "tsc",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "prepack": "npm run build",
+    "test:pack": "npm pack --dry-run",
+    "test:types": "npx @arethetypeswrong/cli --pack .",
+    "test:package": "npx publint"
   },
   "keywords": [
     "israel",
@@ -36,21 +42,19 @@
     "vue",
     "nextjs"
   ],
-  "author": "Your Name",
+  "author": "Akiva Schiff <akiva@ivix.ai>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/israel-geolocation.git"
+    "url": "git+https://github.com/akivaschiff/israel-geolocation.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/israel-geolocation/issues"
+    "url": "https://github.com/akivaschiff/israel-geolocation/issues"
   },
-  "homepage": "https://github.com/yourusername/israel-geolocation#readme",
-  "dependencies": {
-    "dotenv": "^17.2.3"
-  },
+  "homepage": "https://github.com/akivaschiff/israel-geolocation#readme",
   "devDependencies": {
     "@types/node": "^25.0.2",
+    "dotenv": "^17.2.3",
     "typescript": "^5.9.3"
   }
 }

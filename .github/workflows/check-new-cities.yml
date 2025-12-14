@@ -32,7 +32,7 @@ jobs:
           node -e "
             const govData = require('/tmp/gov_data.json');
             const currentData = require('./dist/locations.json');
-            const knownMissing = require('./scripts/known-missing.js');
+            const knownMissing = require('./scripts/known-missing.cjs');
 
             // Known-missing locations to ignore (Bedouin tribes, failed geocoding, etc.)
             const ignoredLocations = new Set(knownMissing);

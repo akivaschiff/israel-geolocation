@@ -134,8 +134,6 @@ function IsraelMap() {
 - Data: **194KB** (locations.json)
 - Code: **1.9KB** (minified)
 
-Tree-shakeable - import only what you need for smaller bundles.
-
 ## License
 
 MIT
