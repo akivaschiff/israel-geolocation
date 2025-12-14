@@ -196,11 +196,6 @@ function isSimilar(str1, str2, threshold = 2) {
     });
   }
 
-  // Count cities
-  const cities = matched.filter(m => m.type === 'city');
-  console.log(`\n🏙️  Official Cities: ${cities.length}`);
-  console.log(`   Sample: ${cities.slice(0, 5).map(c => c.nameEn || c.name).join(', ')}`);
-
   // Load previously geocoded locations if available
   const geocodingReportPath = path.join(__dirname, '..', 'geocoding-report.json');
   if (fs.existsSync(geocodingReportPath)) {
@@ -267,13 +262,4 @@ function isSimilar(str1, str2, threshold = 2) {
   console.log('\n✅ Build complete!');
   console.log(`📦 Total locations: ${matched.length}`);
   console.log(`📂 Output: ${distDir}`);
-
-  // Statistics
-  const towns = matched.filter(l => l.type === 'town').length;
-  const villages = matched.filter(l => l.type === 'village').length;
-
-  console.log(`\n📊 Final Statistics:`);
-  console.log(`   Cities: ${cities.length}`);
-  console.log(`   Towns: ${towns}`);
-  console.log(`   Villages: ${villages}`);
 })();
