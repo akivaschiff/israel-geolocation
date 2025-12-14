@@ -1,6 +1,6 @@
 {
   "name": "israel-geolocation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Complete geolocation data for all Israeli cities, towns, and villages with Hebrew and English names",
   "type": "module",
   "main": "./dist/index.js",

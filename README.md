@@ -2,11 +2,11 @@
 
 Complete geolocation data for all Israeli cities, towns, and villages with Hebrew and English names.
 
-**1,266 locations** with 98% coverage of Israel's official settlements.
+**1,264 locations** with 98% coverage of Israel's official settlements.
 
 ## Features
 
-- ✅ **1,266 locations** from Israeli government data
+- ✅ **1,264 locations** from Israeli government data
 - ✅ **Hebrew + English names** for every location
 - ✅ **Precise coordinates** (latitude/longitude)
 - ✅ **TypeScript** with full type definitions
@@ -26,7 +26,7 @@ npm install israel-geolocation
 import { locations, getById, searchByName } from 'israel-geolocation';
 
 // Get all locations
-console.log(locations.length); // 1,266
+console.log(locations.length); // 1,264
 
 // Get by ID
 const telAviv = getById('5000');
@@ -41,7 +41,7 @@ const results = searchByName('Jerusalem', 'en');  // English
 ## API
 
 ### `locations: Location[]`
-Array of all 1,266 locations.
+Array of all 1,264 locations.
 
 ### `getById(id: string | number): Location | undefined`
 Get a location by its settlement code.
@@ -126,7 +126,7 @@ function IsraelMap() {
 - **OpenStreetMap** - 935 coordinates (ODbL license)
 - **Google Maps Geocoding** - 331 additional coordinates
 
-**Coverage**: 1,266 out of 1,289 official settlements (98%). Excluded: 21 Bedouin tribes, 1 failed geocoding, 1 placeholder entry.
+**Coverage**: 1,264 out of 1,289 official settlements (98%). Excluded: 21 Bedouin tribes, 2 military camps, 1 failed geocoding, 1 placeholder entry.
 
 ## Package Size
 
