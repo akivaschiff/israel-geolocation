@@ -31,7 +31,7 @@ jobs:
           # Extract city names from government data
           node -e "
             const govData = require('/tmp/gov_data.json');
-            const currentData = require('./dist/locations.json');
+            const currentData = require('./src/locations.json');
             const knownMissing = require('./scripts/known-missing.cjs');
 
             // Known-missing locations to ignore (Bedouin tribes, failed geocoding, etc.)
