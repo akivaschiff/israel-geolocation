@@ -6,6 +6,10 @@ module.exports = [
 
   "שמעה",  // Google Maps couldn't find it
 
+  // Military camps - no public coordinates
+  "מחנה יפה",
+  "מחנה יוכבד",
+
   // Bedouin tribes - no fixed geographic locations
   "אעצם (שבט)",
   "אבו עבדון (שבט)",
