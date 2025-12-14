@@ -14,6 +14,6 @@ yarn-error.log*
 .env.local
 .cache
 .parcel-cache
-src/locations.json
+dist/
 geocoding-report.json
 unmatched_towns.json

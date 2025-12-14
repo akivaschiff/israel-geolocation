@@ -21,9 +21,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build-improved.cjs && npm run compile",
-    "compile": "tsc",
-    "prepare": "npm run build",
-    "prepack": "npm run build",
+    "compile": "tsc && cp src/locations.json dist/locations.json",
+    "prepare": "npm run compile",
+    "prepack": "npm run compile",
     "test:pack": "npm pack --dry-run",
     "test:types": "npx @arethetypeswrong/cli --pack .",
     "test:package": "npx publint"
