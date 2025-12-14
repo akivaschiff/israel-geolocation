@@ -8009,14 +8009,6 @@
     "type": "town"
   },
   {
-    "id": "1415",
-    "name": "מחנה יפה",
-    "nameEn": "MAHANE YAFA",
-    "lat": 32.04960790000001,
-    "lon": 34.7588317,
-    "type": "town"
-  },
-  {
     "id": "1196",
     "name": "מחנה יתיר",
     "nameEn": "MAHANE YATTIR",
@@ -8028,14 +8020,6 @@
     "id": "1413",
     "name": "מחנה יהודית",
     "nameEn": "MAHANE YEHUDIT",
-    "lat": 31.776614,
-    "lon": 35.221544,
-    "type": "town"
-  },
-  {
-    "id": "1416",
-    "name": "מחנה יוכבד",
-    "nameEn": "MAHANE YOKHVED",
     "lat": 31.776614,
     "lon": 35.221544,
     "type": "town"
