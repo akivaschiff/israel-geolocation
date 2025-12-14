@@ -1,0 +1,56 @@
+{
+  "name": "israel-geolocation",
+  "version": "1.0.0",
+  "description": "Complete geolocation data for all Israeli cities, towns, and villages with Hebrew and English names",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node scripts/build-improved.js && npm run compile",
+    "compile": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "israel",
+    "geolocation",
+    "cities",
+    "towns",
+    "coordinates",
+    "hebrew",
+    "israeli",
+    "map",
+    "leaflet",
+    "react",
+    "vue",
+    "nextjs"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/israel-geolocation.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/israel-geolocation/issues"
+  },
+  "homepage": "https://github.com/yourusername/israel-geolocation#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.2",
+    "typescript": "^5.9.3"
+  }
+}

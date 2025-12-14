@@ -1,0 +1,143 @@
+name: Check for New Israeli Cities
+
+on:
+  schedule:
+    # Runs every Monday at 9am UTC (11am Israel time)
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  check-new-cities:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check for new cities
+        id: check
+        run: |
+          # Fetch latest government data
+          echo "Fetching latest data from data.gov.il..."
+
+          curl -s 'https://data.gov.il/api/3/action/datastore_search?resource_id=5c78e9fa-c2e2-4771-93ff-7f400a12f7ba&limit=1500' \
+            -o /tmp/gov_data.json
+
+          # Extract city names from government data
+          node -e "
+            const govData = require('/tmp/gov_data.json');
+            const currentData = require('./dist/locations.json');
+            const knownMissing = require('./scripts/known-missing.js');
+
+            // Known-missing locations to ignore (Bedouin tribes, failed geocoding, etc.)
+            const ignoredLocations = new Set(knownMissing);
+
+            const govCities = new Set(
+              govData.result.records
+                .map(r => r['שם_ישוב']?.trim())
+                .filter(Boolean)
+                .filter(city => !ignoredLocations.has(city)) // Exclude known-missing
+            );
+
+            const currentCities = new Set(
+              currentData.map(loc => loc.name)
+            );
+
+            const newCities = [...govCities].filter(city => !currentCities.has(city));
+            const missingCities = [...currentCities].filter(city => !govCities.has(city));
+
+            console.log('NEW_CITIES=' + newCities.length);
+            console.log('MISSING_CITIES=' + missingCities.length);
+
+            if (newCities.length > 0 || missingCities.length > 0) {
+              const fs = require('fs');
+              fs.writeFileSync('/tmp/report.json', JSON.stringify({
+                new: newCities,
+                missing: missingCities,
+                govTotal: govCities.size,
+                currentTotal: currentCities.size
+              }, null, 2));
+            }
+          " >> $GITHUB_OUTPUT
+
+      - name: Create issue if changes detected
+        if: hashFiles('/tmp/report.json') != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('/tmp/report.json', 'utf8'));
+
+            let body = `## 🔍 Israeli Cities Update Report\n\n`;
+            body += `**Government database:** ${report.govTotal} cities\n`;
+            body += `**Current package:** ${report.currentTotal} cities\n\n`;
+
+            if (report.new.length > 0) {
+              body += `### 🆕 New cities found (${report.new.length})\n\n`;
+              body += `These cities are in the government database but not in our package:\n\n`;
+              report.new.slice(0, 20).forEach(city => {
+                body += `- ${city}\n`;
+              });
+              if (report.new.length > 20) {
+                body += `\n... and ${report.new.length - 20} more\n`;
+              }
+              body += `\n### ✅ Action needed:\n`;
+              body += `1. Verify these are real new cities (not data errors)\n`;
+              body += `2. Find coordinates using Google Maps or Nominatim\n`;
+              body += `3. Add to \`dist/locations.json\`\n`;
+              body += `4. Update package version and publish\n\n`;
+            }
+
+            if (report.missing.length > 0) {
+              body += `### ⚠️ Cities removed from government database (${report.missing.length})\n\n`;
+              body += `These cities are in our package but no longer in government data:\n\n`;
+              report.missing.slice(0, 20).forEach(city => {
+                body += `- ${city}\n`;
+              });
+              if (report.missing.length > 20) {
+                body += `\n... and ${report.missing.length - 20} more\n`;
+              }
+              body += `\n### ✅ Action needed:\n`;
+              body += `1. Verify these cities were actually removed\n`;
+              body += `2. Consider removing from package or investigate why they're missing\n\n`;
+            }
+
+            body += `---\n*Automated check run on ${new Date().toISOString().split('T')[0]}*`;
+
+            // Check if there's already an open issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'city-update'
+            });
+
+            if (issues.data.length > 0) {
+              // Update existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `## New Update Available\n\n${body}`
+              });
+              console.log('Updated existing issue #' + issues.data[0].number);
+            } else {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `🏙️ New Israeli Cities Detected - ${new Date().toISOString().split('T')[0]}`,
+                body: body,
+                labels: ['city-update', 'automated']
+              });
+              console.log('Created new issue for city updates');
+            }
+
+      - name: No changes detected
+        if: hashFiles('/tmp/report.json') == ''
+        run: echo "✅ No new cities detected. Package is up to date!"
